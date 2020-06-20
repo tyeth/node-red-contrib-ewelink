@@ -1,7 +1,7 @@
 module.exports = {
   /**
    * Ready promise.
-   * 
+   *
    * @param {object} RED The NodeRED instance.
    * @param {object} node The current node.
    * @param {object} config The node configuration.
@@ -45,7 +45,7 @@ module.exports = {
 
   /**
    * Initialize device node.
-   * 
+   *
    * @param {object} RED The NodeRED instance.
    * @param {object} node The current node.
    * @param {object} config The node configuration.
@@ -63,10 +63,13 @@ module.exports = {
         // Get method name and build params
         const evaluatedMethod = method || msg.payload.method;
         const evaluatedParams = (typeof params === 'function' ? params(msg) : params) || msg.payload.params || [];
-        
+
         // First parameter should be always the device ID
-        evaluatedParams.unshift(deviceId);
-        
+        Array.prototype.unshift.call(
+          evaluatedParams,
+          deviceId ||  (Object.prototype.hasOwnProperty.call(msg,"deviceid") ? msg.deviceid : '')
+        );
+
         // Call dynamically the method
         connection[evaluatedMethod].apply(connection, evaluatedParams).then(result => {
           node.send({ payload: result });
@@ -77,7 +80,7 @@ module.exports = {
 
   /**
    * Set node status to 'connecting'.
-   * 
+   *
    * @param {object} node The node which status will be changed.
    */
   setNodeStatusToConnecting(node) {
@@ -90,7 +93,7 @@ module.exports = {
 
   /**
    * Set node status to 'connected'.
-   * 
+   *
    * @param {object} node The node which status will be changed.
    */
   setNodeStatusToConnected(node) {
@@ -103,7 +106,7 @@ module.exports = {
 
   /**
    * Set node status to 'disconnected'.
-   * 
+   *
    * @param {object} node The node which status will be changed.
    */
   setNodeStatusToDisconnected(node) {

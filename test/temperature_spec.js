@@ -64,8 +64,6 @@ describe('Temperature Node', () => {
           sinon.assert.calledWith(methodStub, '12345');
           sinon.assert.calledOnce(readyStub);
 
-
-
           n4.on('input', msg => {
             expect(msg).to.deep.include({ payload: { methodResult: 'great' } });
             done();
@@ -107,7 +105,7 @@ describe('Temperature Node', () => {
             throw Exception('No input expected to node, fail test');
 
           });
-          setTimeout(() => done(), 300);
+          setTimeout(() => done(), 100);
         });
 
         n3.send({ payload: '' });
@@ -139,8 +137,6 @@ describe('Temperature Node', () => {
           sinon.assert.calledWith(methodStub, '54321');
           sinon.assert.calledOnce(readyStub);
 
-
-
           n4.on('input', msg => {
             expect(msg).to.deep.include({ payload: { methodResult: 'great' } });
             done();
@@ -148,7 +144,7 @@ describe('Temperature Node', () => {
           });
         });
 
-        n3.send({ payload: '54321' });
+        n3.send({ payload: {params:{deviceid:"54321"}},deviceid: '54321',  });
       });
     });
   });
@@ -176,8 +172,6 @@ describe('Temperature Node', () => {
         n2.on('input', () => {
           sinon.assert.calledWith(methodStub, '10001');
           sinon.assert.calledOnce(readyStub);
-
-
 
           n4.on('input', msg => {
             done();
